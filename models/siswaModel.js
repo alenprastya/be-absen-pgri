@@ -36,6 +36,10 @@ const Siswa = db.define(
     freezeTableName: true,
   }
 );
+
+Users.hasMany(Siswa);
+Siswa.belongsTo(Users, { foreignKey: "userId" });
+
 Siswa.belongsTo(Kelas, { foreignKey: "kode_kelas", targetKey: "kode_kelas" });
 
 export default Siswa;

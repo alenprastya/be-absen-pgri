@@ -20,8 +20,7 @@ const store = new sessionStore({
   db: db,
 });
 
-// db.sync();
-
+db.sync();
 app.use(
   session({
     secret: SESS_SECRET,

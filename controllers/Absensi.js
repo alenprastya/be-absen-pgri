@@ -2,27 +2,16 @@ import Absen from "../models/absensiModel.js";
 import Siswa from "../models/siswaModel.js";
 import Kelas from "../models/kelasModel.js";
 import { Op } from "sequelize";
+import Walas from "../models/walasModel.js";
+
 export const getAbsensi = async (req, res) => {
   try {
     let response;
     if (req.role === "admin") {
       response = await Absen.findAll({
-        attributes: ["nis", "jenis_absen"],
         include: [
           {
             model: Siswa,
-            attributes: ["nama_kelas"],
-            attributes: ["nama_siswa"],
-          },
-        ],
-      });
-    } else {
-      response = await Absen.findAll({
-        attributes: ["nis", "jenis_absen"],
-        include: [
-          {
-            model: Siswa,
-            attributes: ["nama_siswa"],
             include: [
               {
                 model: Kelas,
@@ -31,14 +20,20 @@ export const getAbsensi = async (req, res) => {
             ],
           },
         ],
-        where: {
-          userId: req.userId,
-        },
+      });
+    } else {
+      response = await Absen.findAll({
+        include: [
+          {
+            model: Kelas,
+            attributes: ["kode_kelas", "nama_kelas"],
+          },
+        ],
       });
     }
     res.status(200).json(response);
   } catch (error) {
-    res.status(500).json({ msg: error.massage });
+    res.status(500).json({ msg: error.message });
   }
 };
 
